@@ -6,7 +6,8 @@ import path from "path";
 
 
 import authRoute from "./routes/auth_route.js"
-
+import convRoute from "./routes/conv_route.js"
+import msgRoute from "./routes/msg_route.js"
 
 dotenv.config();
 dbConnect(); //connection with database
@@ -22,6 +23,8 @@ app.use(cookieParser());
 //mounts (adding/ appending the ) todo API routes :: when user hits the user the bydefault path is atteached with the entered request
 
 app.use("/api/auth", authRoute); 
+app.use("/api/conversations", convRoute); 
+app.use("/api/messages", msgRoute); 
 
 
 
