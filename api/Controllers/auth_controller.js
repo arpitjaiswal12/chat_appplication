@@ -1,5 +1,7 @@
 import User from "../model/user_model.js"
 import bcryptjs from "bcryptjs"
+import { errorHandler } from "../utils/error.js";
+import jwt from "jsonwebtoken";
 
 
 export const SignUp = async (req, res) => {
@@ -23,4 +25,22 @@ export const SignUp = async (req, res) => {
          
     }
     
+};
+
+export const SignIn = async (req, res, next) => {
+    const { email, password } = req.body;
+    try {
+      const validUser = await User.findOne({ email }); // finding email from db
+      if (!validUser) return next(errorHandler(404, 'User not found! Please SignUp')); // is email is valid or not 
+      const validPassword = bcryptjs.compareSync(password, validUser.password);  //finding the password from db
+      if (!validPassword) return next(errorHandler(401, 'Wrong credentials!')); // is password is valid or not 
+      const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECERT); // creating  a token that makes user login for period of time 
+      const { password: pass, ...rest } = validUser._doc;  //destructure the passwords as user can'nt see the password 
+      res
+        .cookie('access_token', token, { httpOnly: true , expires: new Date(Date.now()+24*60*60)})  // expire of an token 
+        .status(200)
+        .json(rest); //return all thing except password 
+    } catch (error) {
+      next(error);
+    }
 };
