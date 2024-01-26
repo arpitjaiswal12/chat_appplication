@@ -31,11 +31,11 @@ export default function Header() {
         <div>
           <ul className="flex md:gap-8 cursor-pointer">
             {/* <Link to='/'> */}
-            <li className="hidden sm:inline text-slate-950 hover:text-red-500 ">
+            <li className="flex font-normal hover:font-bold w-20 h-6 justify-center items-center px-12 text-base text-gray hover:underline underline-offset-[4px] decoration-[1px] hover:text-[#262626] hoverEffect last:border-r-0">
               Chat
             </li>
             {/* </Link> */}
-            <li className="hidden sm:inline text-slate-950 hover:text-red-500">
+            <li className="flex font-normal hover:font-bold w-20 h-6 justify-center items-center px-12 text-base  text-gray  hover:underline underline-offset-[4px] decoration-[1px] hover:text-[#262626] hoverEffect last:border-r-0">
               About
             </li>
 
@@ -47,9 +47,9 @@ export default function Header() {
                   alt="profile"
                 />
               ) : (
-                <li className=" fleFx font-normal hover:font-bold w-20 h-6 justify-center items-center px-12 text-base text-[#767676] hover:underline underline-offset-[4px] decoration-[1px] hover:text-[#262626] md:border-r-[2px] border-r-gray-300 hoverEffect last:border-r-0">
+                <li className=" fleFx font-normal hover:font-bold w-20 h-6 justify-center items-center px-12 text-base text-gray hover:underline underline-offset-[4px] decoration-[1px] hover:text-[#262626] hoverEffect last:border-r-0">
                   {" "}
-                  Login
+                  SignIn
                 </li>
               )}
             </Link>

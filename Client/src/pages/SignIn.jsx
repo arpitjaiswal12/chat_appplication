@@ -15,14 +15,17 @@ export default function SignIn() {
       ...formData,
       [e.target.id]: e.target.value,
     });
-    setPassword(e.target.value);
+    // setPassword(e.target.value);
   };
+
+  console.log(formData)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // setLoading(true);
       dispatch(loginStart());
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,7 +38,6 @@ export default function SignIn() {
         dispatch(loginFailure(data.message));
         return;
       }
-
       dispatch(loginSuccess(data));
       navigate("/");
     } catch (error) {
@@ -58,15 +60,15 @@ export default function SignIn() {
           </h2>
           <p className="mt-2text-sm text-gray-600 ">
             Don&apos;t have an account?{" "}
-            <a
-              href="#"
+            <Link
+              to="/signup"
               title=""
               className="font-semibold text-black transition-all duration-200 hover:underline"
             >
               Create a free account
-            </a>
+            </Link>
           </p>
-          <form aonSubmit={handleSubmit} method="POST" className="mt-8">
+          <form onSubmit={handleSubmit} className="mt-8">
             <div className="space-y-5">
               <div>
                 <label
@@ -78,7 +80,6 @@ export default function SignIn() {
                 </label>
                 <div className="mt-2">
                   <input
-
                     className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                     type="email"
                     placeholder="Email"
@@ -104,13 +105,12 @@ export default function SignIn() {
                     placeholder="Password"
                     id="password"
                     onChange={handleChange}
-                  ></input>
+                  />
                 </div>
               </div>
               <div>
                 <button
-                 disabled={loading}
-                  type="button"
+                  disabled={loading}
                   className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                 >
                   {loading ? "Loading..." : "Get started"}

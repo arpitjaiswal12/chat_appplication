@@ -7,12 +7,14 @@ import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import PrivateRoute from "./Components/PrivateRoute";
 import Profile from "./pages/Profile";
+import Home from "./pages/Home";
 
 function App() {
   return (
     <BrowserRouter>
       <Header />
       <Routes>
+        <Route path="/" element={<Home/>}/>
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn/>} />
         <Route element={<PrivateRoute/>}>
