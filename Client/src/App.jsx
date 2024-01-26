@@ -1,16 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Header from './Components/Header'
+import { useState } from "react";
+
+import "./App.css";
+import Header from "./Components/Header";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import SignUp from "./pages/SignUp";
 
 function App() {
-
   return (
-    <>
-      <Header/>
-    </>
-  )
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route path="/signup" element={<SignUp />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
