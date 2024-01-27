@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import dbConnect from "./config/database.js";
 import path from "path";
-
 import authRoute from "./routes/auth_route.js";
 import msgRoute from "./routes/msg_route.js";
 
