@@ -10,6 +10,7 @@ import path from "path";
 import authRoute from "./routes/auth_route.js";
 import msgRoute from "./routes/msg_route.js";
 
+
 dotenv.config();
 dbConnect(); //connection with database
 
@@ -56,3 +57,8 @@ io.on("connection", (socket) => {
 server.listen(3001, () => {
   console.log(`Server is started at port 3001`);
 });
+
+app.use(express.static(path.join(__dirname,'/Client/dist')));
+app.get('*',(req,res)=>{
+  res.sendFile(path.join(__dirname,'Client','dist','index.html'));
+})
