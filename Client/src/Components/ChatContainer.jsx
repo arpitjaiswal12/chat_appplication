@@ -1,22 +1,32 @@
-import React,{ useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import ChatInput from "./ChatInput";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 
-export default function ChatContainer({ currentChat, currentUser }) {
+export default function ChatContainer({ currentChat, currentUser, socket }) {
   const [messages, setMessages] = useState([]);
   const scrollRef = useRef();
+  const [arrivalMessage, setArrivalMessage] = useState(null);
 
-  useEffect(async () => {
-    const response = await axios.post("/api/messages/getmsg", {
-      from: currentUser._id,
-      to: currentChat._id,
-    });
-    setMessages(response.data);
+  useEffect(() => {
+    const getMsg = async () => {
+      const response = await axios.post("/api/messages/getmsg", {
+        from: currentUser._id,
+        to: currentChat._id,
+      });
+      setMessages(response.data);
+    };
+    getMsg();
   }, [currentChat]);
 
   const handleSendMsg = async (msg) => {
+    socket.current.emit("send-msg", {
+      to: currentChat._id,
+      from: currentUser._id,
+      msg,
+    });
+
     await axios.post("/api/messages/addmsg", {
       from: currentUser._id,
       to: currentChat._id,
@@ -29,43 +39,61 @@ export default function ChatContainer({ currentChat, currentUser }) {
   };
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    const socketfunction=()=>{
+      if (socket.current) {
+        socket.current.on("msg-recieve", (msg) => {
+          setArrivalMessage({ fromSelf: false, message: msg });
+        });
+      }
+    }
+    socketfunction();
+  }, []);
+
+  useEffect(() => {
+    const checkArrivalMsg=()=>{
+      arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
+    }
+    checkArrivalMsg();
+  }, [arrivalMessage]);
+
+  useEffect(() => {
+    const scrollDown=()=>{
+      scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+    scrollDown();
   }, [messages]);
+
   return (
-    <>
-      {currentChat && (
-        <Container>
-          <div className="chat-header">
-            <div className="user-details">
-              <div className="avatar">
-                <img src={`${currentChat.avatar}`} alt="" />
-              </div>
-              <div className="username">
-                <h3>{currentChat.username}</h3>
+    <Container>
+      <div className="chat-header">
+        <div className="user-details">
+          <div className="avatar">
+            <img src={`${currentChat.avatar}`} alt="" />
+          </div>
+          <div className="username">
+            <h3>{currentChat.username}</h3>
+          </div>
+        </div>
+      </div>
+      <div className="chat-messages">
+        {messages.map((message) => {
+          return (
+            <div ref={scrollRef} key={uuidv4()}>
+              <div
+                className={`message ${
+                  message.fromSelf ? "sended" : "recieved"
+                }`}
+              >
+                <div className="content ">
+                  <p>{message.message}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="chat-messages">
-            {messages.map((message) => {
-              return (
-                <div ref={scrollRef} key={uuidv4()}>
-                  <div
-                    className={`message ${
-                      message.fromSelf ? "sended" : "recieved"
-                    }`}
-                  >
-                    <div className="content ">
-                      <p>{message.message}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <ChatInput handleSendMsg={handleSendMsg} />
-        </Container>
-      )}
-    </>
+          );
+        })}
+      </div>
+      <ChatInput handleSendMsg={handleSendMsg} />
+    </Container>
   );
 }
 
@@ -93,7 +121,8 @@ const Container = styled.div`
       }
       .username {
         h3 {
-          color: white;
+          color: black;
+          font-size:18px;
         }
       }
     }
@@ -107,7 +136,7 @@ const Container = styled.div`
     &::-webkit-scrollbar {
       width: 0.2rem;
       &-thumb {
-        background-color: #ffffff39;
+        background-color: green;
         width: 0.1rem;
         border-radius: 1rem;
       }
@@ -121,7 +150,7 @@ const Container = styled.div`
         padding: 1rem;
         font-size: 1.1rem;
         border-radius: 1rem;
-        color: #d1d1d1;
+        color: white;
         @media screen and (min-width: 720px) and (max-width: 1080px) {
           max-width: 70%;
         }
@@ -130,13 +159,13 @@ const Container = styled.div`
     .sended {
       justify-content: flex-end;
       .content {
-        background-color: #4f04ff21;
+        background-color: black;
       }
     }
     .recieved {
       justify-content: flex-start;
       .content {
-        background-color: #9900ff20;
+        background-color: black;
       }
     }
   }

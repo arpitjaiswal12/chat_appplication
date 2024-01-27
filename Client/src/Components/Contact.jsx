@@ -8,11 +8,14 @@ export default function Contact({ contacts, currentUser,changeChat }) {
   const [currentSelected, setCurrentSelected] = useState(undefined);
 
   useEffect(() => {
-    if (currentUser) {
-      setCurrentUserImage(currentUser.avatar);
-      setCurrentUserName(currentUser.username);
+    const checkfunction=()=>{
+      if (currentUser) {
+        setCurrentUserImage(currentUser.avatar);
+        setCurrentUserName(currentUser.username);
+      }
     }
-  });
+    return checkfunction();
+  },[]);
 
   const changeCurrentChat = (index, contact) => {
     setCurrentSelected(index);
@@ -71,7 +74,7 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: 10% 75% 15%;
   overflow: hidden;
-  background-color: #080420;
+  background-color: #1B5E20;
   .brand {
     display: flex;
     align-items: center;
@@ -81,6 +84,7 @@ const Container = styled.div`
       height: 2rem;
     }
     h3 {
+      font-size:25px;
       color: white;
       text-transform: uppercase;
     }
@@ -100,7 +104,7 @@ const Container = styled.div`
       }
     }
     .contact {
-      background-color: #ffffff34;
+      background-color: #388E3C;
       min-height: 5rem;
       cursor: pointer;
       width: 90%;
@@ -117,17 +121,18 @@ const Container = styled.div`
       }
       .username {
         h3 {
-          color: white;
+          color: black;
+          font-size:18px;
         }
       }
     }
     .selected {
-      background-color: #9a86f3;
+      background-color: green;
     }
   }
 
   .current-user {
-    background-color: #0d0d30;
+    background-color: #1B5E20;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -141,6 +146,7 @@ const Container = styled.div`
     .username {
       h2 {
         color: white;
+        font-size:18px;
       }
     }
     @media screen and (min-width: 720px) and (max-width: 1080px) {

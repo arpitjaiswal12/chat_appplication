@@ -18,8 +18,10 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: black;
   flex-direction: column;
+  font-size:25px;
+  font-weight: bold;
   span {
     color: #4e0eff;
   }

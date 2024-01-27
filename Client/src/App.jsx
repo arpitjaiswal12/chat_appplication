@@ -8,7 +8,6 @@ import SignIn from "./pages/SignIn";
 import PrivateRoute from "./Components/PrivateRoute";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
-import Messenger from "./pages/messenger/Messenger";
 import Chat from "./pages/Chat";
 
 function App() {
@@ -22,7 +21,6 @@ function App() {
         
         <Route element={<PrivateRoute/>}>
           <Route path="/profile" element={<Profile/>}/>
-          <Route path="/messenger" element={<Messenger/>}/>
           <Route path="/chat" element={<Chat/>}/>
         </Route>
       </Routes>
