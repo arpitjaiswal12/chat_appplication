@@ -26,6 +26,11 @@ app.use(cors());
 app.use("/api/auth", authRoute);
 app.use("/api/messages", msgRoute);
 
+app.use(express.static(path.join(__dirname,'/Client/dist')));
+app.get('*',(req,res)=>{
+  res.sendFile(path.join(__dirname,'Client','dist','index.html'));
+})
+
 const server = createServer(app);
 
 const io = new Server(server, {
@@ -58,7 +63,4 @@ server.listen(3001, () => {
   console.log(`Server is started at port 3001`);
 });
 
-app.use(express.static(path.join(__dirname,'/Client/dist')));
-app.get('*',(req,res)=>{
-  res.sendFile(path.join(__dirname,'Client','dist','index.html'));
-})
+
