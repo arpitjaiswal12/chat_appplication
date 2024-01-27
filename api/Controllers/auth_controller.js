@@ -65,3 +65,17 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAllUsers = async (req,res,next)=>{
+  try {
+    const users = await User.find({ _id: { $ne: req.params.id } }).select([
+      "email",
+      "username",
+      "avatar",
+      "_id",
+    ]);
+    return res.json(users)
+  } catch (error) {
+    next(error);
+  }
+}
